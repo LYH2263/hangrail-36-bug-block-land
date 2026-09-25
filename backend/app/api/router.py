@@ -23,6 +23,7 @@ from app.schemas.schemas import (
     RailOut,
     StoreOut,
 )
+from app.services.forbid_gate import bands_for_map
 from app.services.rail_engine import Segment, first_fit, validate_forbidden
 
 api_router = APIRouter()
@@ -115,7 +116,7 @@ def occupancy(rail_id: int, db: Session = Depends(get_db)):
         label=rail.label,
         length_cm=rail.length_cm,
         segments=segs,
-        forbidden=__import__('app.services.forbid_gate', fromlist=['bands_for_map']).bands_for_map(forbidden),
+        forbidden=bands_for_map(forbidden),
     )
 
 

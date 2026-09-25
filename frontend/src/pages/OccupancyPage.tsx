@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
-import { bandsOnMap } from "../bandCopy";
 type Rail = { id: number; label: string; length_cm: number };
 type Occ = {
   rail_id: number; label: string; length_cm: number;
@@ -23,10 +22,10 @@ export default function OccupancyPage() {
       <div className="ruler-wrap" key={m.rail_id}>
         <div className="ruler-label"><span>{m.label}</span><span className="mono">0 — {m.length_cm} cm</span></div>
         <div className="ruler">
-          {bandsOnMap(m.forbidden, []).map(f => (
+          {m.forbidden.map(f => (
             <div key={`f${f.id}`} className="seg seg--forbidden"
               style={{ left: `${(f.start_cm / m.length_cm) * 100}%`, width: `${((f.end_cm - f.start_cm) / m.length_cm) * 100}%` }}
-              title={`禁挂 ${f.start_cm}-${f.end_cm}cm`}>
+              title={`禁挂 [${f.start_cm}, ${f.end_cm}) cm`}>
               禁挂
             </div>
           ))}

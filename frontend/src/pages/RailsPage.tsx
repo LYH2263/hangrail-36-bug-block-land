@@ -19,6 +19,12 @@ export default function RailsPage() {
     if (railId === "") { setErr("请选择挂杆"); return; }
     const s = Number(start), en = Number(end);
     if (!Number.isFinite(s) || !Number.isFinite(en)) { setErr("请输入有效数字"); return; }
+    const rail = rows.find(r => r.id === railId);
+    if (!rail) { setErr("请选择挂杆"); return; }
+    if (s >= en) { setErr("起点必须小于终点（半开区间）"); return; }
+    if (s < 0 || en > rail.length_cm) { setErr(`禁挂段超出挂杆范围（0 — ${rail.length_cm} cm）`); return; }
+    const overlapsBand = rail.forbidden_segments.some(f => s < f.end_cm && f.start_cm < en);
+    if (overlapsBand) { setErr("禁挂段与已有禁挂段重叠"); return; }
     setBusy(true);
     try {
       await api(`/rails/${railId}/forbidden`, {
