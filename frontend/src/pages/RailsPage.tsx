@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
+import { bandSaveRejectReason } from "../bandCopy";
 type F = { id: number; start_cm: number; end_cm: number };
 type R = { id: number; store_id: number; label: string; length_cm: number; forbidden_segments: F[] };
 export default function RailsPage() {
@@ -19,6 +20,9 @@ export default function RailsPage() {
     if (railId === "") { setErr("请选择挂杆"); return; }
     const s = Number(start), en = Number(end);
     if (!Number.isFinite(s) || !Number.isFinite(en)) { setErr("请输入有效数字"); return; }
+    const rail = rows.find(r => r.id === railId);
+    const reason = rail ? bandSaveRejectReason(rail.length_cm, s, en) : null;
+    if (reason) { setErr(reason); return; }
     setBusy(true);
     try {
       await api(`/rails/${railId}/forbidden`, {

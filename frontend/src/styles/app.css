@@ -280,6 +280,7 @@ button {
 }
 .seg--forbidden {
   top: 2px; bottom: 2px;
+  z-index: 2;
   background: repeating-linear-gradient(
     -45deg, #3a1210 0px, #3a1210 6px, #571c16 6px, #571c16 12px
   );
